@@ -1,0 +1,46 @@
+// For format details, see https://aka.ms/vscode-remote/devcontainer.json or this file's README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.134.0/containers/cpp
+{
+	"name": "C++",
+	"build": {
+		"dockerfile": "Dockerfile",
+		// Update 'VARIANT' to pick an Debian OS version: buster, stretch
+		"args": { "VARIANT": "buster" }
+	},
+	"runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined"],
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"clangd.path": "clangd-11",
+		"clangd.fallbackFlags": ["-g3", "-std=c++17"],
+		"clangd.checkUpdates": true,
+		"clangd.arguments": [],
+		"editor.defaultFormatter": "ms-vscode.cpptools",
+		"C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: LLVM, UseTab: Never, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Attach, AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4 }",
+		"editor.formatOnPaste": true,
+		"editor.formatOnSave": true,
+		"cmake.cmakePath": "/usr/bin/cmake",
+		"cmake.buildEnvironment": {},
+		"cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json"
+	},
+
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"ms-vscode.cpptools",
+		"llvm-vs-code-extensions.vscode-clangd",
+		"ms-vscode.cmake-tools",
+		// "vadimcn.vscode-lldb",
+		"gruntfuggly.todo-tree"
+	],
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "gcc -v",
+
+	// Comment out this line to run as root instead.
+	"remoteUser": "vscode"
+
+}
