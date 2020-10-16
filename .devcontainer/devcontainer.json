@@ -30,8 +30,8 @@
 		"ms-vscode.cpptools",
 		"llvm-vs-code-extensions.vscode-clangd",
 		"ms-vscode.cmake-tools",
-		// "vadimcn.vscode-lldb",
-		"gruntfuggly.todo-tree"
+		"gruntfuggly.todo-tree",
+		"twxs.cmake"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
