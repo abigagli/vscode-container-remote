@@ -2,20 +2,19 @@
 ARG VARIANT="buster"
 FROM mcr.microsoft.com/vscode/devcontainers/cpp:0-${VARIANT}
 
+# Avoid apt-key emitting "Warning: apt-key output should not be parsed (stdout is not a terminal)"
+ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 
-RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 
 # Add APT sources for debian testing ("bullseye")
 RUN echo "\n\
 deb http://deb.debian.org/debian testing main contrib non-free\n\
 deb-src http://deb.debian.org/debian testing main contrib non-free\n\n\
-
 deb http://deb.debian.org/debian/ testing-updates main contrib non-free\n\
 deb-src http://deb.debian.org/debian/ testing-updates main contrib non-free\n\n\
-
 deb http://deb.debian.org/debian-security testing-security main\n\
 deb-src http://deb.debian.org/debian-security testing-security main\n\n\
-
 deb http://security.debian.org testing-security main contrib non-free\n\
 deb-src http://security.debian.org testing-security main contrib non-free\
 " >> /etc/apt/sources.list
