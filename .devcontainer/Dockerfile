@@ -2,6 +2,8 @@
 ARG VARIANT="buster"
 FROM mcr.microsoft.com/vscode/devcontainers/cpp:0-${VARIANT}
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 # Avoid apt-key emitting "Warning: apt-key output should not be parsed (stdout is not a terminal)"
 ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 
@@ -27,17 +29,11 @@ deb http://apt.llvm.org/unstable/ llvm-toolchain-${LLVM_VERSION} main\n\
 deb-src http://apt.llvm.org/unstable/ llvm-toolchain-${LLVM_VERSION} main\
 " >> /etc/apt/sources.list
 
-RUN export DEBIAN_FRONTEND=noninteractive && apt update
-
-# This appears to be necessary to successfully install latest g++ from debian testing ("bullseye")
-# See https://www.reddit.com/r/debian/comments/h878ci/fullupgrade_to_debian_testing_fails_due_to/
-RUN export DEBIAN_FRONTEND=noninteractive && apt -y install gcc-8-base
-
-# Install latest g++
-RUN export DEBIAN_FRONTEND=noninteractive && apt -y install g++
+RUN apt-get update &&\
+    apt-get -y -f -o APT::Immediate-Configure=0 install gcc-8-base g++
 
 # Install latest clang/llvm/lldb
-RUN export DEBIAN_FRONTEND=noninteractive && apt -y install --no-install-recommends \
+RUN apt-get -y install --no-install-recommends \
     llvm-${LLVM_VERSION} \
     clang-${LLVM_VERSION} \
     clang-tools-${LLVM_VERSION} \
@@ -54,17 +50,14 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt -y install --no-install-recomme
     libomp-${LLVM_VERSION}-dev 
 
 # Upgrade gdb
-RUN export DEBIAN_FRONTEND=noninteractive && apt -y install gdb
-
-# Upgrade build-essential
-RUN export DEBIAN_FRONTEND=noninteractive && apt -y install build-essential
-
-# Install boost
-RUN export DEBIAN_FRONTEND=noninteractive && apt -y install libboost-all-dev libboost-tools-dev
-
-# Upgrade cmake
-RUN export DEBIAN_FRONTEND=noninteractive && apt -y install cmake
+RUN apt-get -y install \
+    gdb \
+    build-essential \
+    libboost-all-dev \
+    libboost-tools-dev \
+    cmake
 
 # Cleanup
-RUN export DEBIAN_FRONTEND=noninteractive && apt -y remove lldb-7
-RUN export DEBIAN_FRONTEND=noninteractive && apt -y autoremove
+RUN apt-get -y remove lldb-7 &&\
+    apt-get -y autoremove
+
